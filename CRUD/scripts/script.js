@@ -2,6 +2,7 @@ const URL = "https://65427baaad8044116ed370d0.mockapi.io/users/";
 
 const container = document.getElementById("results");
 
+const alertError = document.getElementById("alert-error");
 
 // Fetch
 async function fetchData() {
@@ -29,40 +30,59 @@ function addToContainer(data) {
 
 
 
+
 //GET
 const btnGet1 = document.getElementById("btnGet1");
 const inputGet1 = document.getElementById("inputGet1Id");
 
-btnGet1.addEventListener('click', function() {
-  let getURL = URL + inputGet1.value;
-  let getOptions = {
-      method: "GET", headers: {"Content-type": "application/json; charset=UTF-8"}
+// Función para realizar la solicitud GET
+async function getRequest(url) {
+  const getOptions = {
+    method: "GET",
+    headers: { "Content-type": "application/json; charset=UTF-8" },
   };
 
-  fetch(getURL, getOptions)
-  .then(response => response.json())
-  .then(data => {
-    if (inputGet1.value === "") {
-      let listHTML = '';
-      data.forEach(item => {
-        listHTML += `
-          <li>ID: ${item.id}</li>
-          <li>NAME: ${item.name}</li>
-          <li>LASTNAME: ${item.lastname}</li>
-          <br>
-        `;
-      });
-      container.innerHTML = listHTML;
-    } else {
-      container.innerHTML = `
-        <li>ID: ${data.id}</li>
-        <li>NAME: ${data.name}</li>
-        <li>LASTNAME: ${data.lastname}</li>
-      `;
-    }
-  })
+  try {
+    const response = await fetch(url, getOptions);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
 
-})
+// Función para mostrar los resultados del GET
+function displayData(data) {
+  container.innerHTML = '';
+  data.forEach(item => {
+    container.innerHTML += `
+      <li>ID: ${item.id}</li>
+      <li>NAME: ${item.name}</li>
+      <li>LASTNAME: ${item.lastname}</li>
+      <br>
+    `;
+  });
+}
+
+// Evento btn GET
+btnGet1.addEventListener("click", async function() {
+  if (inputGet1.value === "") {
+    try {
+      const data = await getRequest(URL);
+      displayData(data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  } else {
+    const getURL = URL + inputGet1.value;
+    try {
+      const data = await getRequest(getURL);
+      displayData([data]);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+});
 
 
 
@@ -197,8 +217,11 @@ btnDelete.addEventListener('click', async function() {
       const updatedDeleteData = await fetchData();
       // Actualiza la interfaz con los datos actualizados
       addToContainer(updatedDeleteData);
+      
 
   } catch (error) {
-      console.error('Error:', error);
+    alertError.classList.remove("fade");
+    console.error('Error:', error);
+      
   }
 });
