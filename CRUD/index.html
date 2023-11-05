@@ -43,10 +43,31 @@
                             <h6>Modificar registro</h6>
                             <input type="number" id="inputPutId" class="form-control"
                                 placeholder="ID del registro a modificar">
-                            <button id="btnPut" class="btn btn-warning position-absolute bottom-0 mb-3" disabled>
+                            <button id="btnPut" class="btn btn-warning position-absolute bottom-0 mb-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop" disabled>
                                 Modificar</button>
                         </div>
                     </div>
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-body">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="nameModifyInput" placeholder="Nombre">
+                                    <label for="nameModifyInput">Nombre</label>
+                                  </div>
+                                  <div class="form-floating">
+                                    <input type="text" class="form-control" id="lastnameModifyInput" placeholder="Apellido">
+                                    <label for="lastnameModifyInput">Apellido</label>
+                                </div>                              
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                              <button type="button" id="saveBtn" class="btn btn-primary" data-bs-dismiss="modal">Guardar</button>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
                     <div class="col-md-6">
                         <div class="border p-3 my-3 position-relative" id="delete-box">
                             <h6>Eliminar registro</h6>
